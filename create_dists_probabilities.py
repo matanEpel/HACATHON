@@ -11,17 +11,17 @@ def plot_all():
     merged_data = np.hstack([dists.reshape(dists.shape[0], 1)[:-1], amount_in_pair[1:-1]])  # TODO: there are nulls
     df = pd.DataFrame(merged_data).dropna()
     df.columns = ['dist', '0->0', '0->1', '1->0', "1->1"]
-    df = df.groupby("dist", as_index=False).sum()
     df = df[df["dist"] > 0].dropna()
+    df = df[df["dist"] <= 400].dropna()
+    df.to_pickle("./final_samples.pkl")
+
+    df = df.groupby("dist", as_index=False).sum()
     prior_0 = (df['0->0'] + df['0->1'])
     prior_1 = df['1->0'] + df['1->1']
     df['0->0'] /= prior_0
     df['0->1'] /= prior_0
     df['1->0'] /= prior_1
     df['1->1'] /= prior_1
-    df = df.dropna()
-    print(df)
-
     fig = px.scatter(df, x='dist', y=df.columns)
     fig.show()
 
