@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import plotly.express as px
+from cantor_fit import apply_fit_on_df
 
 
 def plot_all():
@@ -22,6 +23,7 @@ def plot_all():
     df['0->1'] /= prior_0
     df['1->0'] /= prior_1
     df['1->1'] /= prior_1
+    df = apply_fit_on_df(df, False)
     fig = px.scatter(df, x='dist', y=df.columns)
     fig.show()
 
